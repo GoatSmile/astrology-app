@@ -22,8 +22,10 @@ planets = load('de421.bsp')  # Now uses proper deployment path
 print(f"DEBUG: app.py is RUNNING... [Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]")  # Debug line
 
 # Load environment variables
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# load_dotenv()
+# For Local
+#client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Accurate Mercury Retrograde Check
 def is_mercury_retrograde():
@@ -142,8 +144,11 @@ def generate_news_with_openai(news_options):
 
 
 def generate_realtime_news(topic):
-    api_key = os.getenv("GNEWS_API_KEY")
+    # For Local
+    #  api_key = os.getenv("GNEWS_API_KEY")
     
+    api_key = OpenAI(api_key=secrets["GNEWS_API_KEY"])
+
     # Calculate date 13 months ago
     end_date = datetime.now()
     start_date = end_date - relativedelta(months=13)
@@ -168,13 +173,13 @@ def generate_realtime_news(topic):
         } for a in articles[:3]]  # Ensure max 3 articles
         
     except Exception as e:
-        st.error(f"News Error: {str(e)}")
+        error(f"News Error: {str(e)}")
         return []
 
 # Streamlit UI Setup
-st.set_page_config(page_title="Cosmic Insight", layout="wide", page_icon="🌌")
+set_page_config(page_title="Cosmic Insight", layout="wide", page_icon="🌌")
 
-st.markdown("""
+markdown("""
 <style>
 .cosmic-header {
     color: #9D70F9 !important;
@@ -193,17 +198,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='cosmic-header'>🌠 Your Cosmic Insight 🌠</h1>", unsafe_allow_html=True)
+markdown("<h1 class='cosmic-header'>🌠 Your Cosmic Insight 🌠</h1>", unsafe_allow_html=True)
 
 # Form for User Input
-with st.form("astro_form"):
-    col1, col2 = st.columns(2)
+with form("astro_form"):
+    col1, col2 = columns(2)
     with col1:
-        name = st.text_input("Your Name", placeholder="Cosmic Traveler...")
-        dob = st.date_input("Birth Date", value=datetime(2000, 1, 1))
+        name = text_input("Your Name", placeholder="Cosmic Traveler...")
+        dob = date_input("Birth Date", value=datetime(2000, 1, 1))
     with col2:
         # love_options = ["Adventure", "Creativity", "Relationships", "Knowledge", "Nature"]
-        # love_choice = st.selectbox("Cosmic Passion", love_options)
+        # love_choice = selectbox("Cosmic Passion", love_options)
         love_options = ["cats", "dogs", "flowers", "blue sky", "mother", "spouse", "kids", "bicycle", "Bitcoin"]
         love_choice = st.selectbox("What do you love most?", love_options)
     #    news_options = ["Politics", "Entertainment", "Trump","Local Copenhagen"]
