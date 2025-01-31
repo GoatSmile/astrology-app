@@ -13,6 +13,11 @@ import requests
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta  # For accurate month calculations
 
+# Add this after imports; ADDED FOR ONLINE VERSION
+from skyfield.api import Loader
+load = Loader('/tmp')
+planets = load('de421.bsp')  # Now uses proper deployment path
+
 # print("DEBUG:  app.py is RUNNING... ")  # Debug line
 print(f"DEBUG: app.py is RUNNING... [Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]")  # Debug line
 
